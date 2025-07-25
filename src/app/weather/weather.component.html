@@ -1,0 +1,71 @@
+<div class="weather-container">
+  <div class="weather-card">
+    <div class="header">
+      <h1>🌤️ Weather Forecast</h1>
+      <p>Get real-time weather information for any city</p>
+    </div>
+
+    <div class="search-section">
+      <div class="search-box">
+        <input 
+          type="text" 
+          [(ngModel)]="city" 
+          placeholder="Enter city name..."
+          (keyup.enter)="getWeather()"
+          class="city-input"
+        >
+        <button (click)="getWeather()" class="search-btn" [disabled]="loading">
+          🔍 Search
+        </button>
+      </div>
+      <button (click)="getCurrentLocation()" class="location-btn" [disabled]="loading">
+        📍 My Location
+      </button>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading weather data...</p>
+    </div>
+
+    <div *ngIf="weatherData && !loading" class="weather-info">
+      <div class="location">
+        <h2>{{ weatherData.name }}, {{ weatherData.sys.country }}</h2>
+      </div>
+
+      <div class="current-weather">
+        <div class="temperature">
+          <span class="temp-value">{{ Math.round(weatherData.main.temp) }}°C</span>
+          <span class="feels-like">Feels like {{ Math.round(weatherData.main.feels_like) }}°C</span>
+        </div>
+        <div class="weather-icon">
+          <img [src]="getWeatherIconUrl(weatherData.weather[0].icon)" [alt]="weatherData.weather[0].description">
+          <p class="weather-description">{{ weatherData.weather[0].description | titlecase }}</p>
+        </div>
+      </div>
+
+      <div class="weather-details">
+        <div class="detail-item">
+          <span class="detail-label">💨 Wind Speed</span>
+          <span class="detail-value">{{ weatherData.wind.speed }} m/s</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">💧 Humidity</span>
+          <span class="detail-value">{{ weatherData.main.humidity }}%</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">🌡️ Pressure</span>
+          <span class="detail-value">{{ weatherData.main.pressure }} hPa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Powered by <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a></p>
+    </div>
+  </div>
+</div> 
